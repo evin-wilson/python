@@ -1,39 +1,39 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from time import sleep
 
-driver = webdriver.Chrome()
-driver.get('https://www.instagram.com')
-sleep(5)
-username = 'USERNAME'
-password = 'PASSWORD'
-username_elm = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[2]/div/label/input')
-username_elm.send_keys(username)
-password_elm = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[3]/div/label/input')
-password_elm.send_keys(password)
-login_elm = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[4]/button')
-login_elm.click()
-sleep(3)
-turn_off = driver.find_element_by_xpath('/html/body/div[4]/div/div/div[3]/button[2]').click()
-# driver.get('https://www.instagram.com/direct/t/340282366841710300949128287692404343073')
-inbox = driver.find_element_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[2]/a').click()
+class instagram_bot(object):
+    """docstring for instagram_bot"""
+    def __init__(self, username, password, front_page_loading_delay = 5, home_page_loading_delay = 3):
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless')
+        super(instagram_bot, self).__init__()
+        self.username = username
+        self.password = password
+        
+        driver = webdriver.Chrome()
+        driver.get('https://www.instagram.com')
+        sleep(front_page_loading_delay)
 
-chat = driver.find_element_by_xpath_('/html/body/div[1]/section/nav/div[2]/div/div/div[3]/div/div[2]/a/svg/path').click()
+        username_elm = driver.find_element_by_name('username').send_keys(username)
+        password_elm = driver.find_element_by_name('password').send_keys(password)
+        login_elm = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[4]/button').click()
+                          
+        sleep(home_page_loading_delay)
 
-sendMessage = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div/button').click()
-message = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[1]/div[1]/div/div[3]/button').click()
-to = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[1]/div/div[2]/input').send_keys('ramgopal')
-sleep(5)
-fi = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[2]/div[1]').click()
-sleep(1)
-se = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[2]/div[2]').click()
-sleep(5)
-choose = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[2]/div[1]/div/div[3]/button').click()
+        self.turn_off_notification = driver.find_element_by_xpath('/html/body/div[4]/div/div/div[3]/button[2]').click()
 
-sleep(1)
-nextb = driver.find_element_by_xpath('/html/body/div[4]/div/div[1]/div/div[2]/div/button').click()
-sleep(2)
-textarea = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
-textarea.send_keys('hi')
-send = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button').click()
-sleep(5)
-driver.quit()
+    def chat(self,username_of_friend):
+        self.inbox = driver.find_element_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[2]/a').click()
+        self.message = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[1]/div[1]/div/div[3]/button').click()
+
+        self.chat_with = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[1]/div/div[2]/input')\
+                          .send_keys(username_of_friend)
+        sleep(3)
+
+        self.choose = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[2]/div[1]/div/div[3]/button').click()
+        sleep(1)
+        self.nextb = driver.find_element_by_xpath('/html/body/div[4]/div/div[1]/div/div[2]/div/button').click()
+        sleep(2)
+        
+   
