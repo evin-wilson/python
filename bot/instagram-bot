@@ -1,39 +1,48 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from time import sleep
 
 class instagram_bot(object):
-    """docstring for instagram_bot"""
-    def __init__(self, username, password, front_page_loading_delay = 5, home_page_loading_delay = 3):
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        super(instagram_bot, self).__init__()
-        self.username = username
-        self.password = password
+	"""docstring for instagram_bot"""
+	def __init__(self, username, password, login_page_loading_delay = 5, home_page_loading_delay = 3):
+		super(instagram_bot, self).__init__()
+		self.username = username
+		self.password = password
+		
+		self.driver = webdriver.Chrome()
+		self.driver.get('https://www.instagram.com')
+		sleep(login_page_loading_delay)
+
+		username_elm = self.driver.find_element_by_xpath("//input[@name=\'username\']").send_keys(self.username)
+		password_elm = self.driver.find_element_by_xpath("//input[@name=\'password\']").send_keys(self.password)
+		login_elm = self.driver.find_element_by_xpath("//button[@type=\'submit\']").click()
+		                  
+		sleep(home_page_loading_delay)
+
+		turn_off_notification = self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div[3]/button[2]').click()
+
+	def chat(self, username_of_friend):
+		driver = self.driver
+
+		inbox = driver.find_element_by_xpath('//a[@href="/direct/inbox/"]').click()
+		sleep(2)
+		new_message = driver.find_element_by_xpath('//button[@type="button"]').click()
+		sleep(2)
+		to = driver.find_element_by_xpath('//input[@name="queryBox"]').send_keys(username_of_friend)
+		sleep(2)
+		choose = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[2]/div[1]/div/div[3]/button').click()
+		sleep(2)
+		nextb = driver.find_element_by_xpath('/html/body/div[4]/div/div[1]/div/div[2]/div/button').click()
+		sleep(2)
+
+		def message(text):
+			driver = self.driver
+			textarea = driver.find_element_by_xpath('//textarea').send_keys(text)
+			send = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button')\
+			             .click()
+		return message
         
-        driver = webdriver.Chrome()
-        driver.get('https://www.instagram.com')
-        sleep(front_page_loading_delay)
-
-        username_elm = driver.find_element_by_name('username').send_keys(username)
-        password_elm = driver.find_element_by_name('password').send_keys(password)
-        login_elm = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[4]/button').click()
-                          
-        sleep(home_page_loading_delay)
-
-        self.turn_off_notification = driver.find_element_by_xpath('/html/body/div[4]/div/div/div[3]/button[2]').click()
-
-    def chat(self,username_of_friend):
-        self.inbox = driver.find_element_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[2]/a').click()
-        self.message = driver.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[1]/div[1]/div/div[3]/button').click()
-
-        self.chat_with = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[1]/div/div[2]/input')\
-                          .send_keys(username_of_friend)
-        sleep(3)
-
-        self.choose = driver.find_element_by_xpath('/html/body/div[4]/div/div[2]/div[2]/div[1]/div/div[3]/button').click()
-        sleep(1)
-        self.nextb = driver.find_element_by_xpath('/html/body/div[4]/div/div[1]/div/div[2]/div/button').click()
-        sleep(2)
         
-   
+bot = instagram_bot('USERNAME', 'PASSWORD')
+friend = bot.chat('friend_username')
+friend('chating..')
+friend'chating')
